@@ -40,23 +40,21 @@ var start = async (params) => {
     await require('./integral').gamebox(request, options)
   }, taskOption)
 
-
+  // 首页-积分商城-定向积分专区-每日抽奖(1次免费及5次花费定向积分抽奖)
+  await scheduler.regTask('dailylotteryintegral', async (request) => {
+    await require('./dailyShop').dailyintegrallottery(request, options)
+  }, taskOption)
 
   // 首页-游戏-娱乐中心-沃之树
   await scheduler.regTask('dailywoTree', async (request) => {
     await require('./woTree').doTask(request, options)
   }, taskOption)
 
-
-
-  // 首页-小说-读满10章赢好礼
-  await scheduler.regTask('dailyBookRead10doDraw', async (request) => {
-    // 首页-小说-读满10章赢好礼
-    await require('./dailyVideoBook').read10doDraw(request, options)
-    // 首页-签到有礼-免流量得福利-3积分天天拿(阅读打卡) 已下线
-    // await require('./dailyVideoBook').giftBoints(request, options)
-  }, taskOption)
-
+  //阅读领1G流量
+  await scheduler.regTask('dailyBookRead1GFlow', async (request) => {
+      await require("./dailyVideoBook").read1GFlow(request, options)
+	   await require("./dailyVideoBook").dovideoIntegralTask(request, options)
+    }, taskOption )
 
   // 首页-游戏-娱乐中心-每日打卡
   await scheduler.regTask('producGameSignin', async (request) => {
@@ -82,6 +80,10 @@ var start = async (params) => {
     startTime: 9 * 3600
   })
 
+  // await require('./integral').getflDetail(request, options)
+  // await require('./integral').getTxDetail(request, options)
+  // await require('./integral').getDxDetail(request, options)
+  // await require('./integral').getCoins(request, options)
 
   // 每日评论积分
   await scheduler.regTask('dailycomment', async (request) => {
@@ -99,36 +101,27 @@ var start = async (params) => {
 
 
 
-  // 首页-知识-阅读答题赢好礼
-  await scheduler.regTask('dailyBookAnswer', async (request) => {
-    await require('./dailyBookAnswer').doTask(request, options)
-  }, taskOption)
-
-
-
-  // 首页-签到有礼-免费拿-猜拳拿奖
-  await scheduler.regTask('dailyFingerSign', async (request) => {
-    await require('./dailyFingerSign').doTask(request, options)
-  }, taskOption)
-
   // 首页-积分商城-火热抢购-三只松鼠-看视频得积分
   await scheduler.regTask('dailyShopVideoIntegral', async (request) => {
     await require('./dailyShop').dovideoIntegralTask(request, options)
   }, taskOption)
 
-
+  // 服务-办理-套餐变更-赚积分
+  await scheduler.regTask('dailyPackageIntegral', async (request) => {
+    await require('./dailyOtherRewardVideo').doPackeageChangeVideoIntegralTask(request, options)
+  }, taskOption)
 
   // 服务-查询-电子发票-赚积分
-  await scheduler.regTask('dailyWisdomActivityIntegral', async (request) => {
-    await require('./dailyOtherRewardVideo').doWisdomActivityIntegralTask(request, options)
+//await scheduler.regTask('dailyWisdomActivityIntegral', async (request) => {
+//    await require('./dailyOtherRewardVideo').doWisdomActivityIntegralTask(request, options)
+//  }, taskOption)
+
+  // 冬奥-冰雪俱乐部-联通客户日-幸运九宫格
+  await scheduler.regTask('dailyClubLottery', async (request) => {
+    await require('./dailyClubLottery').doTask(request, options)
   }, taskOption)
 
 
-
-  // 积分商城-疯踩小橙（沃耀联通小游戏）
-  await scheduler.regTask('woyaoliantong', async (request) => {
-    await require('./woyaoliantong').doTask(request, options)
-  }, taskOption)
 
   // 首页-签到-APP下载领积分
   await scheduler.regTask('dailyDownloadApp', async (request) => {
@@ -148,6 +141,21 @@ var start = async (params) => {
     ignoreRelay: true
   })
 
+  // 每日0点自动兑换流量
+//  await scheduler.regTask('exchangeDFlow', async (request) => {
+//   await require('./exchangeDFlow').doTask(request, options)
+//  }, {
+//    ...taskOption,
+//    startTime: 0,
+//    startHours: 0,
+//    ignoreRelay: true
+//  })
+
+  // 定时检测流量兑换
+  // 可使用 --exchangeDFlowCircle-intervalTime 1800 选项指定流量检查间隔时间，单位秒
+  // 可使用 --exchangeDFlowCircle-minFlow 200 选项指定流量检查最小值
+  // 可使用 --exchangeDFlowCircle-productId 21010621565413402 选项指定兑换流量包ID
+  // let { 'exchangeDFlowCircle-productId': productId = 'ff80808166c5ee6701676ce21fd14716' } = options
 
 
   // 每日奖励信息结果推送
